@@ -3,14 +3,20 @@
 import axios from "axios";
 
 const url = "https://covid19.mathdro.id/api";
-const dailyUrl = "https://covid19.mathdro.id/api/daily";
 
-export const fetchData = async () => {
+export const fetchData = async (country) => {
+    let changeableUrl = url;
+
+    // If Country Is Provided As A Parameter, Connect To API Endpoint Belonging To Specified Country, Else Connect To Original Url
+    if (country) {
+        changeableUrl = `${url}/countries/${country}`
+    }
+
     try {
-        const { data: { confirmed, recovered, deaths, lastUpdate } } = await axios.get(url); /* This Returns JSON Object With Multiple Fields
-                                                                                                But We Destructure The data Field Only, From The Response 
-                                                                                                In Order To Isolate The Required Data Only
-                                                                                             */
+        const { data: { confirmed, recovered, deaths, lastUpdate } } = await axios.get(changeableUrl); /* This Returns JSON Object With Multiple Fields
+                                                                                                        But We Destructure The data Field Only, From The Response 
+                                                                                                        In Order To Isolate The Required Data Only
+                                                                                                       */
         
         // Object To Store The Data
         const modifiedData = {
@@ -36,6 +42,15 @@ export const fetchDailyData = async () => {
         }))
         return modifiedData;
     } catch (error) {
-        
+        console.log(error);
+    }
+}
+
+export const fetchCountries = async () => {
+    try {
+        const { data: {countries} } = await axios.get(`${url}/countries`);
+        return countries.map((country) => country.name);
+    } catch (error) {
+        console.log(error);
     }
 }
