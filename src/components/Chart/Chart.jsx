@@ -15,7 +15,7 @@ const Charts = ({ data: {confirmed, recovered, deaths}, country }) => {
         }
 
         fetchAPIData();
-    }, []); // Put An Empty Array As Second Parameter To Prevent Repetetive Calls To API
+    }); // Put An Empty Array As Second Parameter To Prevent Repetetive Calls To API
 
 
     // Line Chart
